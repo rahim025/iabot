@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Donia</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" />
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='icon-192.png') }}" />
+  <meta name="theme-color" content="#4F6EF7" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+</head>
+<body>
+  <div id="layout">
+    <aside id="sidebar">
+      <button id="new-chat-btn">+ Nouvelle conversation</button>
+      <div id="conversation-list">
+        {% for conv in conversations %}
+        <div class="conv-item" data-id="{{ conv.id }}">
+          <span class="conv-title">{{ conv.title }}</span>
+          <button class="conv-delete" data-id="{{ conv.id }}" title="Supprimer">✕</button>
+        </div>
+        {% endfor %}
+      </div>
+      <a href="{{ url_for('logout') }}" id="logout-link">Déconnexion ({{ current_user.username }})</a>
+      <p id="creator-credit">Créée par Rahim Batchabi</p>
+    </aside>
+
+    <div id="app">
+      <header>
+        <h1>Donia</h1>
+        <div class="header-actions">
+          <select id="model-select">
+            {% for m in models %}
+            <option value="{{ m.id }}" {% if m.id == default_model %}selected{% endif %}>{{ m.label }}</option>
+            {% endfor %}
+          </select>
+          <button id="export-pdf-btn" title="Exporter en PDF">📄 PDF</button>
+        </div>
+      </header>
+
+      <main id="messages"></main>
+
+      <form id="chat-form">
+        <textarea id="chat-input" placeholder="Écris ton message..." rows="1" required></textarea>
+        <button type="submit" id="send-btn">Envoyer</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
